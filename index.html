@@ -16,7 +16,6 @@ body{font-family:Arial;margin:0;background:#f5f7fa;}
   border-bottom:3px solid #1f5aa6;
 }
 
-.header img{height:40px;}
 .header-title{font-weight:bold;color:#1f5aa6;}
 
 .info-bar{
@@ -68,6 +67,18 @@ button{
 .restart-btn{background:#2ecc71;flex:1;}
 .end-btn{background:#34495e;width:100%;}
 
+.print-btn{
+  background:#27ae60;
+  width:100%;
+  margin-top:15px;
+}
+
+@media print {
+  .control, .print-btn {
+    display:none;
+  }
+}
+
 .big{font-size:24px;text-align:center;}
 
 table{width:100%;border-collapse:collapse;}
@@ -94,7 +105,6 @@ th{
 <body>
 
 <div class="header">
-  <!--<img src="https://www.cfnews.net/var/cfnews/storage/images/_aliases/medium/mediatheque/hd/standard-hd/logos/novares-art-logo-2019/1372329-3-fre-FR/Novares-ART-Logo-2019.png">-->
   <div class="header-title">Run@Rate Tool</div>
 </div>
 
@@ -132,7 +142,7 @@ th{
 <button class="end-btn control" onclick="endProduction()">END OF PRODUCTION</button>
 
 <div class="card" id="performanceCard">
-  <h3>Performance</h3>
+  <h3>PERFORMANCE</h3>
   <div id="perf"></div>
 </div>
 
@@ -145,6 +155,10 @@ th{
   <h3>TABLE</h3>
   <table id="table"></table>
 </div>
+
+<button id="printBtn" class="print-btn" onclick="printReport()" style="display:none">
+  PRINT REPORT (PDF)
+</button>
 
 </div>
 </div>
@@ -160,6 +174,10 @@ let targetVal=0;
 let isPaused=false;
 let pauseStart=null;
 let timerInterval=null;
+
+function printReport(){
+  window.print();
+}
 
 function start(){
   const client = document.getElementById("client").value;
@@ -321,7 +339,7 @@ function rebuildTable(){
       row.innerHTML=`<td>PAUSE</td><td>${e.value.toFixed(2)}</td><td>⏸</td><td></td>`;
     }
     if(e.type==="scrap"){
-      row.innerHTML=`<td>SCRAP</td><td>${e.value.toFixed(2)}</td><td>❌</td><td></td>`;
+      row.innerHTML=`<td>SCRAP</td><td>${e.value.toFixed(2)}</td><td>❌</td><td><span class="delete-btn" onclick="deleteRow(${i})">🗑️</span></td>`;
     }
   });
 }
@@ -371,6 +389,8 @@ function endProduction(){
   document.getElementById("cycle").style.display="none";
   document.querySelectorAll(".control").forEach(el=>el.style.display="none");
   document.querySelectorAll(".delete-btn").forEach(el=>el.style.display="none");
+
+  document.getElementById("printBtn").style.display="block";
 }
 
 </script>
